@@ -11,7 +11,7 @@
 	<groupId>com.bidding.system</groupId>
 	<artifactId>bidding</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
+	<name>bidding</name>
 	<description/>
 	<url/>
 	<licenses>
@@ -60,8 +60,15 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
-
+	
+        <!-- Source: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+    <version>0.13.0</version>
+    <scope>compile</scope>
+</dependency>
+        </dependencies>
 	<build>
 		<plugins>
 			<plugin>
