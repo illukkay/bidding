@@ -19,13 +19,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class TokenService {
-    @Value("api.security.token.secret")
+    @Value("${api.security.token.secret}")
     private String secret;
     
-    public SecretKey getSingKey(){
-       byte[] keyBytes = Decoders.BASE64.decode(this.secret);
+    public SecretKey getKeySign() {
+        byte[] keyBytes = Decoders.BASE64.decode(this.secret);
         return Keys.hmacShaKeyFor(keyBytes);
-        
     }
     
     public String gerarToken(UserDTO user) {
@@ -40,14 +39,14 @@ public class TokenService {
               .claim("usuario", user)
               .issuedAt(new Date())
               .expiration(new Date(System.currentTimeMillis() + 3000000))
-              .signWith(this.getSingKey())
+              .signWith(this.getKeySign())
               .compact();
                
     }
     
     public UserDTO extrairClaim(String token){
         Claims claims = Jwts.parser()
-               .verifyWith(this.getSingKey())
+               .verifyWith(this.getKeySign())
                .build()
                .parseEncryptedClaims(token)
                .getPayload();

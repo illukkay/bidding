@@ -1,0 +1,40 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.bidding.system.bidding.controller;
+
+import com.bidding.system.bidding.model.UserDTO;
+import com.bidding.system.bidding.model.UserRequestDTO;
+import com.bidding.system.bidding.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ *
+ * @author Aluno
+ */
+@RestController
+@RequestMapping("/api/user")
+public class UserController {
+    
+    @Autowired
+    private UserService service;
+    
+    @PostMapping("/registrar")
+    public String Registrar(@RequestBody UserDTO user) {
+        service.register(user);
+        return "Cadastro feito com sucesso!";
+           
+}
+    @PostMapping("/logar")
+    public String Login (@RequestBody UserRequestDTO usuario) {
+       return service.Logar(usuario);
+       
+    }
+    
+    
+}

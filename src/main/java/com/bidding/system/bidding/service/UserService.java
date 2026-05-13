@@ -18,6 +18,9 @@ public class UserService {
     @Autowired
     private UserDAO service;
     
+    @Autowired
+    private TokenService TokenService;
+    
     public void register (UserDTO user){
         String mensagem = "";
        if (user.getNome().equals("")){
@@ -30,14 +33,14 @@ public class UserService {
            user.setRole("FORNECEDOR");
        }
        
-       if(mensagem.equals("")){
-           throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+       if(!mensagem.equals("")){
+           throw new ResponseStatusException(HttpStatusCode.valueOf(400), mensagem);
        }
         service.register(user);
     }
     
     
-    public UserDTO Logar(UserRequestDTO user){
+    public String Logar(UserRequestDTO user){
         String mensagem = "";
      if(user.getEmail().equals("")){
          mensagem = "email nao preenchido";
@@ -45,11 +48,12 @@ public class UserService {
          mensagem = "senha nao preenchida";
      }
     
-     if(mensagem.equals("")){
-           throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+     if(!mensagem.equals("")){
+           throw new ResponseStatusException(HttpStatusCode.valueOf(400), mensagem);
        }
-     return service.logar(user.getEmail(), user.getSenha());
-        
+     UserDTO UserLogar = service.logar(user.getEmail(), user.getSenha());
+     return TokenService.gerarToken(UserLogar);
+     
         
     }
      
