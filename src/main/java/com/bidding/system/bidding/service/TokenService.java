@@ -6,13 +6,14 @@ package com.bidding.system.bidding.service;
 
 import com.bidding.system.bidding.model.UserDTO;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,12 +37,25 @@ public class TokenService {
        }
        return Jwts.builder()
               .subject(user.getNome())
-              .claim("usuario", user)
+              .claim("id", user.getId())
+              .claim("nome", user.getNome())
+              .claim("role", user.getRole())
               .issuedAt(new Date())
               .expiration(new Date(System.currentTimeMillis() + 3000000))
               .signWith(this.getKeySign())
-              .compact();
-               
+              .compact();              
+    }
+    public boolean validarToken(String token) {
+        try {
+            Jwts.parser()
+                    .setSigningKey(getKeySign())
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+           
+             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token expirado ou invalido");
+        }
     }
     
     public UserDTO extrairClaim(String token){
@@ -50,7 +64,13 @@ public class TokenService {
                .build()
                .parseEncryptedClaims(token)
                .getPayload();
-        UserDTO user = claims.get("usuario", UserDTO.class);
+        
+        UserDTO user = new UserDTO();
+        user.setId(claims.get("id", Long.class));
+        user.setNome(claims.get("nome", String.class));
+        user.setRole(claims.get("role", String.class));
+        
+        
         
         return user; 
     }

@@ -56,9 +56,9 @@ public class UserDAO {
            rs = stmt.executeQuery();
            
            if(rs.next()){
-           user.setEmail(rs.getString("email"));
            user.setId(rs.getLong("id"));
            user.setNome(rs.getString("nome"));
+           user.setEmail(rs.getString("email"));       
            user.setRole(rs.getString("role"));
            }
             

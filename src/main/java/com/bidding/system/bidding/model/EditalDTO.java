@@ -4,7 +4,8 @@
  */
 package com.bidding.system.bidding.model;
 
-import java.util.Date;
+import java.sql.Date;
+
 
 
 public class EditalDTO {
@@ -65,6 +66,8 @@ private String status;
         this.status = status;
     }
 
+
+    
 
 
 }
